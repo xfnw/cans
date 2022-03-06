@@ -1,0 +1,3 @@
+    wget vim tmux gnupg ncdu mosh
+    git curl rsync wireguard-tools
+    inetutils dnsutils lynx jo jq
