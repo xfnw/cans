@@ -18,7 +18,7 @@ its like ansible but a shitty shell script!
 
 
 apk update
-apk add musl-dev libressl-dev ctags make cmake gcc curl git ncurses-dev tmux sudo
+apk add musl-dev libretls-dev ctags make cmake gcc curl git ncurses-dev tmux sudo
 
 
 echo '
