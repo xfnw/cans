@@ -1,0 +1,95 @@
+#!/bin/sh
+
+# pacman -Sy curl && curl https://xfnw.ttm.sh/cans/arch.txt > arch && sh arch
+
+set -e
+
+read -p 'what device to install on [vda]> ' vda
+vda=${vda:-vda}
+
+echo 'doot partition time'
+
+echo 'fdisk it'
+fdisk /dev/$vda <<EOF
+o
+n
+p
+
+
+
+a
+w
+
+EOF
+
+
+echo 'ext4 it'
+mkfs.ext4 /dev/"$vda"1
+
+echo 'uwu mount'
+mount /dev/"$vda"1 /mnt
+
+echo 'PACSTRSAP TIME'
+pacstrap /mnt --assume-installed=man-db base linux linux-firmware base-devel xorg xorg-xinit xorg-apps wpa_supplicant iw iwd netctl dhcpcd grub sudo git zsh openssh openresolv curl fzf xclip rsync feh wireguard-tools mandoc man-pages vim dialog  xfce4 xfce4-goodies
+
+echo 'doot stab time'
+genfstab -L /mnt >> /mnt/etc/fstab
+
+echo 'chroot time'
+
+
+
+
+echo 'UR IN THE UK NOW HAHA'
+arch-chroot /mnt ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
+
+echo 'generate da locales'
+echo "en_US.UTF-8 UTF-8" > /mnt/etc/locale.gen
+arch-chroot /mnt locale-gen
+
+read -p "what hostname do ya want> " HOSTNAM
+
+echo "$HOSTNAM" > /mnt/etc/hostname
+cat > /mnt/etc/hosts <<EOF
+127.0.0.1	localhost
+::1		localhost
+127.0.1.1	$HOSTNAM.local $HOSTNAM
+EOF
+
+echo 'sudoing lol'
+cat > /mnt/etc/sudoers <<EOF
+%wheel ALL=(ALL) NOPASSWD: ALL
+EOF
+
+echo 'xinit stuf'
+cat > /mnt/etc/skel/.xinitrc <<EOF
+[ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
+[ -f ~/.Xresources ] && xrdb -load ~/.Xresources
+
+exec startxfce4
+EOF
+
+echo 'remove silly anti-ipv6 lan from gai.conf'
+sed -i '/fc00/d; s/^#label/label/; s/2001:0::.32 \+7/2001:0::\/32   6/' /mnt/etc/gai.conf
+
+arch-chroot /mnt systemctl enable dhcpcd
+
+echo 'set the password'
+arch-chroot /mnt passwd
+
+read -p 'username> ' USERNAM
+arch-chroot /mnt useradd "$USERNAM" -m -s /usr/bin/zsh -U -G wheel
+arch-chroot /mnt passwd "$USERNAM"
+
+
+echo 'yay, its yay'
+arch-chroot -u "$USERNAM" /mnt sh -c 'cd ~'$USERNAM' && git clone https://aur.archlinux.org/yay-bin.git && cd yay-bin && makepkg -si'
+
+echo 'doot grub'
+
+arch-chroot /mnt grub-install --target=i386-pc /dev/$vda
+arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+
+echo 'make some users and stuff, reboop!'
+
+

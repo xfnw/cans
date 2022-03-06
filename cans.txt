@@ -1,0 +1,60 @@
+
+# apk add curl ; curl https://xfnw.ttm.sh/cans/cans.txt | sh
+
+USERNAME=xfnw
+SSHKEY='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGWrzyntW1bgfQ10SBIOMR0ZBkLVtBL1OAGzC2nmUGds ltc@cbarchbtw'
+
+echo '
+welcome to
+                                        
+  ▄█████▄   ▄█████▄  ██▄████▄  ▄▄█████▄ 
+ ██▀    ▀   ▀  ▄▄██  ██▀   ██  ██▄▄▄▄ ▀ 
+ ██        ▄██▀▀▀██  ██    ██   ▀▀▀▀██▄ 
+ ▀██▄▄▄▄█  ██▄▄▄███  ██    ██  █▄▄▄▄▄██ 
+   ▀▀▀▀▀    ▀▀▀▀ ▀▀  ▀▀    ▀▀   ▀▀▀▀▀▀  
+                                        
+its like ansible but a shitty shell script!
+'
+
+
+apk update
+apk add musl-dev libressl-dev ctags make cmake gcc curl git ncurses-dev tmux sudo
+
+
+echo '
+welcome to
+                                        
+  ▄█████▄   ▄█████▄  ██▄████▄  ▄▄█████▄ 
+ ██▀    ▀   ▀  ▄▄██  ██▀   ██  ██▄▄▄▄ ▀ 
+ ██        ▄██▀▀▀██  ██    ██   ▀▀▀▀██▄ 
+ ▀██▄▄▄▄█  ██▄▄▄███  ██    ██  █▄▄▄▄▄██ 
+   ▀▀▀▀▀    ▀▀▀▀ ▀▀  ▀▀    ▀▀   ▀▀▀▀▀▀  
+
+' > /etc/motd
+
+cd
+
+git clone https://git.causal.agency/catgirl --depth 1
+cd catgirl
+./configure
+make
+make install
+
+cd
+
+git clone https://github.com/mcpcpc/kirc --depth 1
+cd kirc
+make
+make install
+
+cd
+
+adduser -D "$USERNAME"
+su "$USERNAME" -c "cd; mkdir .ssh; echo '$SSHKEY' >> .ssh/authorized_keys; chmod 700 -R .ssh"
+
+echo "$USERNAME ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+passwd -d "$USERNAME"
+passwd -d root
+
+echo 'done!'

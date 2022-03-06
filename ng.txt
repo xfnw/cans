@@ -1,0 +1,36 @@
+
+apk add nginx nginx-mod-http-xslt-filter
+
+
+curl https://xfnw.ttm.sh/cans/superbindex.xslt > /etc/nginx/superbindex.xslt
+
+
+echo '
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+	root /var/www/html;
+
+
+        location / {
+                try_files $uri $uri/ =404;
+
+                autoindex on;
+                autoindex_format xml;
+                xslt_stylesheet /etc/nginx/superbindex.xslt;
+        }
+
+        # You may need this to prevent return 404 recursion.
+        location = /404.html {
+                internal;
+        }
+}
+
+' > /etc/nginx/conf.d/default.conf
+
+rc-update add nginx
+/etc/init.d/nginx restart
+
+
+

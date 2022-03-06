@@ -1,0 +1,189 @@
+#!/bin/sh
+
+# pacman -Sy curl && curl https://xfnw.ttm.sh/cans/arch.txt > arch && sh arch
+
+set -e
+
+read -p 'what device to install on [vda]> ' vda
+vda=${vda:-vda}
+
+echo 'doot partition time'
+
+echo 'fdisk it'
+fdisk /dev/$vda <<EOF
+o
+n
+p
+
+
+
+a
+w
+
+EOF
+
+
+echo 'ext4 it'
+mkfs.ext4 /dev/"$vda"1
+
+echo 'uwu mount'
+mount /dev/"$vda"1 /mnt
+
+echo 'PACSTRSAP TIME'
+pacstrap /mnt --assume-installed=man-db base linux linux-firmware base-devel xorg xorg-xinit xorg-apps wpa_supplicant iw iwd netctl dhcpcd grub sudo git zsh openssh openresolv curl fzf xclip rsync feh wireguard-tools mandoc man-pages vim dialog
+
+echo 'doot stab time'
+genfstab -L /mnt >> /mnt/etc/fstab
+
+echo 'chroot time'
+
+
+
+
+echo 'UR IN THE UK NOW HAHA'
+arch-chroot /mnt ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
+
+echo 'generate da locales'
+echo "en_US.UTF-8 UTF-8" > /mnt/etc/locale.gen
+arch-chroot /mnt locale-gen
+
+read -p "what hostname do ya want> " HOSTNAM
+
+echo "$HOSTNAM" > /mnt/etc/hostname
+cat > /mnt/etc/hosts <<EOF
+127.0.0.1	localhost
+::1		localhost
+127.0.1.1	$HOSTNAM.local $HOSTNAM
+EOF
+
+echo 'sudoing lol'
+cat > /mnt/etc/sudoers <<EOF
+%wheel ALL=(ALL) NOPASSWD: ALL
+EOF
+
+echo 'xinit stuf'
+cat > /mnt/etc/skel/.xinitrc <<EOF
+[ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
+[ -f ~/.Xresources ] && xrdb -load ~/.Xresources
+
+exec berry
+EOF
+cat > /mnt/etc/skel/.Xresources <<EOF
+URxvt.perl-ext-common:  clipboard,default,fullscreen
+URxvt.font: xft:Fira Mono:size=12,xft:Noto Color Emoji:size=9,xft:Unifont:pixelsize=12,-*-unifont-*-*-*-*-*-*-*-*-*-*-*-*
+URxvt.clipboard.autocopy: true
+URxvt.keysym.M-c: perl:clipboard:copy
+URxvt.keysym.M-v: perl:clipboard:paste
+URxvt.url-launcher: /usr/bin/xdg-open
+URxvt.perl-ext: default,url-select
+URxvt.keysym.C-M-u: perl:url-select:select_next
+URxvt.url-select.launcher: /usr/bin/xdg-open
+URxvt.url-select.underline: true
+URxvt.scrollBar: false
+URxvt.foreground:       #d3d3d3
+URxvt.background:       #000000
+URxvt.color0:           #161510
+URxvt.color8:           #4C4635
+URxvt.color1:           #A32810
+URxvt.color9:           #CC3214
+URxvt.color2:           #727A18
+URxvt.color10:          #8E991E
+URxvt.color3:           #A37720
+URxvt.color11:          #CC9528
+URxvt.color4:           #3D6266
+URxvt.color12:          #4C7B7F
+URxvt.color5:           #7A4955
+URxvt.color13:          #995B6B
+URxvt.color6:           #557A55
+URxvt.color14:          #6B996B
+URxvt.color7:           #8E8463
+URxvt.color15:          #CCBCBE
+URxvt.termName: xterm-256color
+URxvt.mapAlert:     true
+URxvt.urgentOnBell: true
+URxvt.visualBell:   true
+EOF
+mkdir -p /mnt/etc/skel/.config/berry/
+base64 -d > /mnt/etc/skel/.config/berry/autostart <<EOF
+IyEvYmluL3pzaAoKIyBzdGFydCB0aGUga2V5Ym9hcmQgY29tYmluYXRpb24gZGFlbW9uCnN4aGtk
+IC1jIH4vLmNvbmZpZy9iZXJyeS9zeGhrZHJjICYKCiMgU2V0IGRlY29yYXRpb24gZ2VvbWV0cnkK
+YmVycnljIGJvcmRlcl93aWR0aCAgICAgICAwCmJlcnJ5YyBpbm5lcl9ib3JkZXJfd2lkdGggMApi
+ZXJyeWMgdGl0bGVfaGVpZ2h0ICAgICAgIDI2CmJlcnJ5YyB0b3BfZ2FwICAgICAgICAgICAgMjYK
+CiMgU2V0IGRlY29yYXRpb24gY29sb3JzCmJlcnJ5YyBmb2N1c19jb2xvciAgICAgICAgIDI5MkQz
+RQpiZXJyeWMgdW5mb2N1c19jb2xvciAgICAgICAyOTJEM0UKYmVycnljIGlubmVyX2ZvY3VzX2Nv
+bG9yICAgNTZhYTc5CmJlcnJ5YyBpbm5lcl91bmZvY3VzX2NvbG9yIDU2NTY3OQpiZXJyeWMgdGV4
+dF9mb2N1c19jb2xvciAgICAyMjIyMjIKYmVycnljIHRleHRfdW5mb2N1c19jb2xvciAgZWVlZWVl
+CgojIE90aGVyIG9wdGlvbnMKYmVycnljIHNtYXJ0X3BsYWNlICAgICAgICAgICAgInRydWUiCmJl
+cnJ5YyBkcmF3X3RleHQgICAgICAgICAgICAgICJ0cnVlIgpiZXJyeWMgZWRnZV9sb2NrICAgICAg
+ICAgICAgICAidHJ1ZSIKYmVycnljIHNldF9mb250ICAgICAgICAgICAgICAgIkRpbmEtOSIKCgoj
+IHNldCB0aGUgc2NyZWVuIHJlc29sdXRpb24gaWYgeW91IGFyZSBpbiBhIHZtCnhyYW5kciAtLWxp
+c3Rtb25pdG9ycyB8IGdyZXAgLXEgJ1ZpcnR1YWwtMSAxMDI0LzI3MXg3NjgvMjAzKzArMCcgJiYK
+CXhyYW5kciAtLW91dHB1dCBWaXJ0dWFsLTEgLS1tb2RlIDEzNjZ4NzY4CgojIHNldCB0aGUgd2Fs
+bHBhcGVyCmZlaCAtLXJhbmRvbWl6ZSAtLWJnLWZpbGwgfi9QaWN0dXJlcy93YWxsCgojIHN0YXJ0
+IHRoZSBiYXIKYmF0dGVyeXNlYygpewp6c2ggLWMgJwpHUk1MX0JBVFRFUllfTEVWRUw9IiIKbG9j
+YWwgYmF0dGVyaWVzIGJhdCBjYXBhY2l0eQpiYXR0ZXJpZXM9YGVjaG8gL3N5cy9jbGFzcy9wb3dl
+cl9zdXBwbHkvQkFUKmAKaWYgKCggJCNiYXR0ZXJpZXMgPiAwICkpIDsgdGhlbgogICAgZm9yIGJh
+dCBpbiAkYmF0dGVyaWVzIDsgZG8KICAgICAgICBpZiBbWyAtZSAkYmF0L2NhcGFjaXR5IF1dOyB0
+aGVuCiAgICAgICAgICAgIGNhcGFjaXR5PSQoPCAkYmF0L2NhcGFjaXR5KQogICAgICAgIGVsc2UK
+ICAgICAgICAgICAgdHlwZXNldCAtRiBlbmVyZ3lfZnVsbD0kKDwgJGJhdC9lbmVyZ3lfZnVsbCkK
+ICAgICAgICAgICAgdHlwZXNldCAtRiBlbmVyZ3lfbm93PSQoPCAkYmF0L2VuZXJneV9ub3cpCiAg
+ICAgICAgICAgIHR5cGVzZXQgLWkgY2FwYWNpdHk9JCgoIDEwMCAqICRlbmVyZ3lfbm93IC8gJGVu
+ZXJneV9mdWxsKSkKICAgICAgICBmaQogICAgICAgIGNhc2UgJCg8ICRiYXQvc3RhdHVzKSBpbgog
+ICAgICAgIENoYXJnaW5nKQogICAgICAgICAgICBHUk1MX0JBVFRFUllfTEVWRUwrPSJeIgogICAg
+ICAgICAgICA7OwogICAgICAgIERpc2NoYXJnaW5nKQogICAgICAgICAgICBpZiAoKCBjYXBhY2l0
+eSA8IDIwICkpIDsgdGhlbgogICAgICAgICAgICAgICAgR1JNTF9CQVRURVJZX0xFVkVMKz0iJXtC
+I0FBNzc2Nn0gdiIKICAgICAgICAgICAgZWxzZQogICAgICAgICAgICAgICAgR1JNTF9CQVRURVJZ
+X0xFVkVMKz0idiIKICAgICAgICAgICAgZmkKICAgICAgICAgICAgOzsKICAgICAgICAqKSAjIEZ1
+bGwsIFVua25vd24KICAgICAgICAgICAgR1JNTF9CQVRURVJZX0xFVkVMKz0iPSIKICAgICAgICAg
+ICAgOzsKICAgICAgICBlc2FjCiAgICAgICAgR1JNTF9CQVRURVJZX0xFVkVMKz0iJHtjYXBhY2l0
+eX0lJSIKICAgIGRvbmUKZmkKZWNobyAiJEdSTUxfQkFUVEVSWV9MRVZFTCAle0IjMjkyRDNFfSIK
+JyAyPi9kZXYvbnVsbAp9CgppZiB3aGljaCBsZW1vbmJhcgp0aGVuCnBraWxsIC14IGxlbW9uYmFy
+IHx8IHRydWUKd2hpbGUgc2xlZXAgMQpkbwoJZWNobyAnICV7Y30nYGRhdGUgLVJgJyAle3J9J2Bi
+YXR0ZXJ5c2VjYCcgJ2B1cHRpbWUgfCBjdXQgLWQnICcgLWYxMiB8IGN1dCAtYi00YCcgJwpkb25l
+IHwgbGVtb25iYXIgLWcgeDI2IC1CICcjMjkyRDNFJyAtRiAnI0NDQ0NDQycgLWYgJ0ZpcmEgQ29k
+ZTpzaXplPTk6YW50aWFsaWFzPXRydWUnICYKZmkKCgoK
+EOF
+base64 -d > /mnt/etc/skel/.config/berry/sxhkdrc <<EOF
+IwojIHdtIGluZGVwZW5kZW50IGhvdGtleXMKIwoKIyB0ZXJtaW5hbCBlbXVsYXRvcgpzdXBlciAr
+IFJldHVybgoJdXJ4dnQKCiMgcHJvZ3JhbSBsYXVuY2hlcgpzdXBlciArIGQKCXJvZmkgLXNob3cg
+Y29tYmkKCiMgbWFrZSBzeGhrZCByZWxvYWQgaXRzIGNvbmZpZ3VyYXRpb24gZmlsZXM6CnN1cGVy
+ICsgRXNjYXBlCglwa2lsbCAtVVNSMSAteCBzeGhrZAoKc3VwZXIgKyB3CglmZWggLS1yYW5kb21p
+emUgLS1iZy1maWxsIH4vUGljdHVyZXMvd2FsbAoKIwojIGJlcnJ5IGhvdGtleXMKIwoKc3VwZXIg
+KyB7aCwgaiwgaywgbH0KICAgIGJlcnJ5YyB3aW5kb3dfbW92ZSB7LTUwIDAsIDAgNTAsIDAgLTUw
+LCA1MCAwfQoKc3VwZXIgKyBzaGlmdCArICB7aCwgaiwgaywgbH0KICAgIGJlcnJ5YyB3aW5kb3df
+cmVzaXplIHstNTAgMCwgMCA1MCwgMCAtNTAsIDUwIDB9CgpzdXBlciArIHsxLTl9CiAgICBiZXJy
+eWMgc3dpdGNoX3dvcmtzcGFjZSB7MC05fQoKc3VwZXIgKyBzaGlmdCArIHsxLTl9CiAgICBJTj17
+MC05fSAmJiBiZXJyeWMgc2VuZF90b193b3Jrc3BhY2UgIiRJTiIgJiYgYmVycnljIHN3aXRjaF93
+b3Jrc3BhY2UgIiRJTiIKCnN1cGVyICsgbQogICAgYmVycnljIHdpbmRvd19tb25vY2xlCgpzdXBl
+ciArIGYKICAgIGJlcnJ5YyBmdWxsc2NyZWVuCgpzdXBlciArICBwCiAgICBiZXJyeWMgc25hcF9y
+aWdodAoKc3VwZXIgKyBvIAogICAgYmVycnljIHNuYXBfbGVmdAoKc3VwZXIgKyB0CiAgICBiZXJy
+eWMgdG9nZ2xlX2RlY29yYXRpb25zCgpzdXBlciArIFRhYgogICAgYmVycnljIGN5Y2xlX2ZvY3Vz
+CgpzdXBlciArIHEKICAgIGJlcnJ5YyB3aW5kb3dfY2xvc2UKCnN1cGVyICsgYwogICAgYmVycnlj
+IHdpbmRvd19jZW50ZXIKCn5idXR0b24xCiAgICBiZXJyeWMgcG9pbnRlcl9mb2N1cwo=
+EOF
+
+echo 'remove silly anti-ipv6 lan from gai.conf'
+sed -i '/fc00/d; s/^#label/label/; s/2001:0::.32 \+7/2001:0::\/32   6/' /mnt/etc/gai.conf
+
+arch-chroot /mnt systemctl enable dhcpcd
+
+echo 'set the password'
+arch-chroot /mnt passwd
+
+read -p 'username> ' USERNAM
+arch-chroot /mnt useradd "$USERNAM" -m -s /usr/bin/zsh -U -G wheel
+arch-chroot /mnt passwd "$USERNAM"
+
+
+echo 'yay, its yay'
+arch-chroot -u "$USERNAM" /mnt sh -c 'cd ~'$USERNAM' && git clone https://aur.archlinux.org/yay-bin.git && cd yay-bin && makepkg -si'
+HOME="/home/$USERNAM" arch-chroot -u "$USERNAM" /mnt yay -S rofi berry-git lemonbar-xft-git urxvt-perls ttf-fira-mono sxhkd --overwrite /usr/local/share/man
+
+echo 'doot grub'
+
+arch-chroot /mnt grub-install --target=i386-pc /dev/$vda
+arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+
+echo 'make some users and stuff, reboop!'
+
+

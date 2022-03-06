@@ -1,0 +1,83 @@
+#!/bin/sh
+
+# pacman -Sy curl && curl https://xfnw.ttm.sh/cans/arch.txt > arch && sh arch
+
+set -e
+
+read -p 'what device to install on [vda]> ' vda
+vda=${vda:-vda}
+
+echo 'PACSTRSAP TIME'
+pacstrap /mnt base linux linux-firmware wpa_supplicant iw iwd netctl dhcpcd grub curl rsync openssh qemu libvirt virt-install ebtables dmidecode dnsmasq
+
+echo 'doot stab time'
+genfstab -L /mnt >> /mnt/etc/fstab
+
+echo 'chroot time'
+
+echo 'UR IN THE UK NOW HAHA'
+arch-chroot /mnt ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
+
+echo 'generate da locales'
+echo "en_US.UTF-8 UTF-8" > /mnt/etc/locale.gen
+arch-chroot /mnt locale-gen
+
+read -p "what hostname do ya want> " HOSTNAM
+
+echo "$HOSTNAM" > /mnt/etc/hostname
+cat > /mnt/etc/hosts <<EOF
+127.0.0.1	localhost
+::1		localhost
+127.0.1.1	$HOSTNAM.local $HOSTNAM
+EOF
+
+echo 'sudoing lol'
+cat > /mnt/etc/sudoers <<EOF
+%wheel ALL=(ALL) NOPASSWD: ALL
+EOF
+
+echo 'remove silly anti-ipv6 lan from gai.conf'
+sed -i '/fc00/d; s/^#label/label/; s/2001:0::.32 \+7/2001:0::\/32   6/' /mnt/etc/gai.conf
+sed -i 's/\(HOOKS=([^)]\+\))/\1 keyboard keymap encrypt)/' /mnt/etc/mkinitcpio.conf
+sed -i 's/Arch/HyperArch/' /mnt/etc/os-release
+sed -i 's/^#auth_unix_rw/auth_unix_rw/; s/^#access_drivers/access_drivers/' /mnt/etc/libvirt/libvirtd.conf
+
+base64 -d <<EOF | xz --decompress --stdout > /mnt/etc/polkit-1/rules.d/50-libvirt-acl.rules
+/Td6WFoAAATm1rRGAgAhARYAAAB0L+Wj4AYCAhtdAAUdiYQ9VC2uATbzaiayVovZztU1UMRZmINo
+RFBNcTrDmkCNVePoYapoWwioLNi47Q6O/z6seP3f7Qf2/UouJFFoELnASuQoVBhRmN+zgG4GBuYv
+KmDJB/eVk6I5yoXEAfXwAEJ5C1Z+U1c6WLWg+tdQ3b2FkqsS4nd7rNv8YsLVoazQExpYw7QqQcFl
+eH0aTb3Qc02jQIlmmnyFpM0H2qeNRAR6CqHBSTTgpqBLITKygZbOXBs883Mpsa2h1TL5d1/j6PEc
+f7vNJG2XWsY+Ykw/QLgVAUjJYE0x9sqTNLcrnmv9hqKn4Z5kscFweTtDORBSMduBKIcAaqNHvpfs
+C7BDL8cmh+AHZY60qPV43AgLYaJYEX0zfkR4lhxww4UW8ZKUiHEJVbkZHjh9ywpUVA2FlTiKsg9s
+JvkKx/fjVMEGKgMaj/XCNoCXN9vGgNHruV9d+HgzilD6mesgq2Q3oYg0gz44bc3LgAkECpIgjS9v
+aw9aO6UypUWbIk3gn6XiS2uNl0cYzm4Y6a6YSYN6LgqLc6qMQ2/qsgHv/iQ5yOK5y1oz91Wv69zn
+Vw4xN4By4VobB7+eeDMiyGnuw6+bzDSnSWfGbmLNUCVddR49L/xzcSoFkEOiRNEdGIGyag3Wf4g4
+DBa2ohyz2qxMwPTV50hg0rNv7DWK8Rgn2biagnNHCwHWkyi2R0pe7fuK56lVxkT0iFUC3ZO4HdqE
+AACoOJhGuocfggABtwSDDAAAYbHsx7HEZ/sCAAAAAARZWg==
+EOF
+
+arch-chroot /mnt systemctl enable dhcpcd sshd libvirtd
+
+echo 'set the password'
+arch-chroot /mnt passwd
+
+read -p 'username> ' USERNAM
+arch-chroot /mnt groupadd virtadmins
+arch-chroot /mnt groupadd virtusers
+arch-chroot /mnt useradd "$USERNAM" -m -U -G wheel,virtadmins
+arch-chroot /mnt passwd "$USERNAM"
+
+echo 'doot grub'
+
+arch-chroot /mnt grub-install --target=i386-pc /dev/$vda
+arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg
+
+echo 'initramfs rebuild'
+arch-chroot /mnt mkinitcpio -P
+
+echo 'cleaning up'
+yes | arch-chroot /mnt pacman -Scc
+
+echo 'make some users and stuff, reboop!'
+
+
