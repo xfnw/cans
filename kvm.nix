@@ -10,6 +10,8 @@
       ./hardware-configuration.nix
     ];
 
+  nix.autoOptimiseStore = true;
+
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/vda"; # or "nodev" for efi only
@@ -23,9 +25,10 @@
 
   networking.hostName = "nix"; # Define your hostname.
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  #networking.wireless.userControlled.enable = true; # allow temporary wifi networks via wpa_cli
 
   # Set your time zone.
-  # time.timeZone = "Europe/Amsterdam";
+  time.timeZone = "America/New_York";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -49,14 +52,15 @@
   };
   security.sudo.wheelNeedsPassword = false;
 
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    wget vim tmux gnupg ncdu mosh
-    git curl rsync wireguard-tools
-    inetutils dnsutils lynx jo jq
+    wget vim tmux ncdu
+    git curl rsync jo jq
+    inetutils dnsutils
   ];
+
+  programs.bash.shellAliases."nix-findlinks" = "find -H /nix/var/nix/gcroots/auto -type l | xargs -I {} sh -c 'readlink {}; realpath {}; echo'";
 
   environment.variables = { EDITOR = "vim"; };
 
@@ -98,26 +102,6 @@
         bind S-Right swap-pane -s '{right-of}'
         bind S-Up swap-pane -s '{up-of}'
         bind S-Down swap-pane -s '{down-of}'
-      '';
-    };
-    "vimrc" = {
-      text = ''
-        set number
-        set relativenumber
-        syntax on
-        color pablo
-        set nocompatible
-        filetype plugin indent on
-        set showcmd
-        set showmatch
-        set ignorecase
-        set smartcase
-        set incsearch
-        set autowrite
-        set hidden
-        set mouse=a
-        set textwidth=60
-        set formatoptions-=t
       '';
     };
   };
