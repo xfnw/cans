@@ -56,8 +56,8 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     wget vim tmux ncdu
-    git curl rsync jo jq
-    inetutils dnsutils
+    git curl rsync
+    dnsutils jo jq
   ];
 
   programs.bash.shellAliases."nix-findlinks" = "find -H /nix/var/nix/gcroots/auto -type l | xargs -I {} sh -c 'readlink {}; realpath {}; echo'";
