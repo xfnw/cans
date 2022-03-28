@@ -60,7 +60,7 @@
     dnsutils jo jq
   ];
 
-  programs.bash.shellAliases."nix-findlinks" = "find -H /nix/var/nix/gcroots/auto -type l | xargs -I {} sh -c 'readlink {}; realpath {}; echo'";
+  programs.bash.shellAliases."nix-findlinks" = "find -H /nix/var/nix/gcroots/auto -type l | xargs -I {} sh -c '[[ -d {} || -f {} ]] && readlink {} && realpath {} && echo'";
 
   environment.variables = { EDITOR = "vim"; };
 
