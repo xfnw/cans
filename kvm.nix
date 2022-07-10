@@ -10,7 +10,7 @@
       ./hardware-configuration.nix
     ];
 
-  nix.autoOptimiseStore = true;
+  nix.settings.auto-optimise-store = true;
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
