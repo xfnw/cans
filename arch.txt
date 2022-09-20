@@ -30,7 +30,7 @@ echo 'uwu mount'
 mount /dev/"$vda"1 /mnt
 
 echo 'PACSTRSAP TIME'
-pacstrap /mnt --assume-installed=man-db base linux linux-firmware base-devel xorg xorg-xinit xorg-apps wpa_supplicant iw iwd netctl dhcpcd grub sudo git zsh openssh openresolv curl fzf xclip rsync feh wireguard-tools mandoc man-pages vim dialog btrfs-progs  xfce4 xfce4-goodies
+pacstrap /mnt --assume-installed=man-db base linux linux-firmware base-devel xorg xorg-xinit xorg-apps wpa_supplicant iw iwd netctl dhcpcd grub sudo git zsh openssh openresolv curl fzf xclip rsync feh wireguard-tools mandoc man-pages vim dialog btrfs-progs compsize  xfce4 xfce4-goodies
 
 echo 'doot stab time'
 genfstab -L /mnt >> /mnt/etc/fstab
