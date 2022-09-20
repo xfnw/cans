@@ -8,7 +8,7 @@ read -p 'what device to install on [vda]> ' vda
 vda=${vda:-vda}
 
 echo 'PACSTRSAP TIME'
-pacstrap /mnt base linux linux-firmware wpa_supplicant iw iwd netctl dhcpcd grub curl rsync openssh qemu libvirt virt-install ebtables dmidecode dnsmasq
+pacstrap /mnt base linux linux-firmware wpa_supplicant iw iwd netctl dhcpcd grub curl rsync openssh qemu libvirt virt-install iptables-nft dmidecode dnsmasq
 
 echo 'doot stab time'
 genfstab -L /mnt >> /mnt/etc/fstab
