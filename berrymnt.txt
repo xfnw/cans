@@ -46,6 +46,13 @@ cat > /mnt/etc/skel/.xinitrc <<EOF
 
 exec berry
 EOF
+
+cat > /mnt/etc/skel/.zshrc <<EOF
+bindkey '\eOd' backward-word
+bindkey '\eOc' forward-word
+unsetopt nomatch
+EOF
+
 cat > /mnt/etc/skel/.Xresources <<EOF
 URxvt.perl-ext-common:  clipboard,default,fullscreen
 URxvt.font: xft:Fira Mono:size=12,xft:Noto Color Emoji:size=9,xft:Unifont:pixelsize=12,-*-unifont-*-*-*-*-*-*-*-*-*-*-*-*
@@ -131,13 +138,13 @@ KyB7aCwgaiwgaywgbH0KICAgIGJlcnJ5YyB3aW5kb3dfbW92ZSB7LTUwIDAsIDAgNTAsIDAgLTUw
 LCA1MCAwfQoKc3VwZXIgKyBzaGlmdCArICB7aCwgaiwgaywgbH0KICAgIGJlcnJ5YyB3aW5kb3df
 cmVzaXplIHstNTAgMCwgMCA1MCwgMCAtNTAsIDUwIDB9CgpzdXBlciArIHsxLTl9CiAgICBiZXJy
 eWMgc3dpdGNoX3dvcmtzcGFjZSB7MC05fQoKc3VwZXIgKyBzaGlmdCArIHsxLTl9CiAgICBJTj17
-MC05fSAmJiBiZXJyeWMgc2VuZF90b193b3Jrc3BhY2UgIiRJTiIgJiYgYmVycnljIHN3aXRjaF93
-b3Jrc3BhY2UgIiRJTiIKCnN1cGVyICsgbQogICAgYmVycnljIHdpbmRvd19tb25vY2xlCgpzdXBl
-ciArIGYKICAgIGJlcnJ5YyBmdWxsc2NyZWVuCgpzdXBlciArICBwCiAgICBiZXJyeWMgc25hcF9y
-aWdodAoKc3VwZXIgKyBvIAogICAgYmVycnljIHNuYXBfbGVmdAoKc3VwZXIgKyB0CiAgICBiZXJy
-eWMgdG9nZ2xlX2RlY29yYXRpb25zCgpzdXBlciArIFRhYgogICAgYmVycnljIGN5Y2xlX2ZvY3Vz
-CgpzdXBlciArIHEKICAgIGJlcnJ5YyB3aW5kb3dfY2xvc2UKCnN1cGVyICsgYwogICAgYmVycnlj
-IHdpbmRvd19jZW50ZXIKCn5idXR0b24xCiAgICBiZXJyeWMgcG9pbnRlcl9mb2N1cwo=
+MC05fSAmJiBiZXJyeWMgc2VuZF90b193b3Jrc3BhY2UgIiRJTiIKCnN1cGVyICsgbQogICAgYmVy
+cnljIHdpbmRvd19tb25vY2xlCgpzdXBlciArIGYKICAgIGJlcnJ5YyBmdWxsc2NyZWVuCgpzdXBl
+ciArICBwCiAgICBiZXJyeWMgc25hcF9yaWdodAoKc3VwZXIgKyBvIAogICAgYmVycnljIHNuYXBf
+bGVmdAoKc3VwZXIgKyB0CiAgICBiZXJyeWMgdG9nZ2xlX2RlY29yYXRpb25zCgpzdXBlciArIFRh
+YgogICAgYmVycnljIGN5Y2xlX2ZvY3VzCgpzdXBlciArIHEKICAgIGJlcnJ5YyB3aW5kb3dfY2xv
+c2UKCnN1cGVyICsgYwogICAgYmVycnljIHdpbmRvd19jZW50ZXIKCn5idXR0b24xCiAgICBiZXJy
+eWMgcG9pbnRlcl9mb2N1cwo=
 EOF
 
 echo 'remove silly anti-ipv6 lan from gai.conf'
