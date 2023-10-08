@@ -13,6 +13,7 @@ RUN adduser -D -h /wiki wiki &&\
 COPY startup.sh /usr/local/bin/
 COPY lighttpd.conf /etc/lighttpd/
 COPY auto.setup /etc/ikiwiki/
+COPY 404.cgi /etc/ikiwiki/
 
 EXPOSE 80
 CMD /usr/local/bin/startup.sh
