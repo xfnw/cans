@@ -3,11 +3,16 @@
 FROM alpine:edge
 
 RUN sed -i '/community$/{p;s/community$/testing/;}' /etc/apk/repositories && \
-	apk add --no-cache git ikiwiki lighttpd
+	apk add --no-cache git ikiwiki lighttpd python3 tcc musl-dev perl-db_file
 
-RUN sed -i '$s/.*/server.modules += ( "mod_cgi" )\n\
-	cgi.assign = ( "ikiwiki.cgi" => "" )\n\
-	&/' /etc/lighttpd/lighttpd.conf
+# ikiwiki does not allow deviating from the "master" branch name
+RUN adduser -D -h /wiki wiki &&\
+	su wiki -c 'git config --global init.defaultBranch master' &&\
+	ln -s /usr/bin/tcc /usr/bin/cc
+
+COPY startup.sh /usr/local/bin/
+COPY lighttpd.conf /etc/lighttpd/
+COPY auto.setup /etc/ikiwiki/
 
 EXPOSE 80
-CMD /usr/sbin/lighttpd -f /etc/lighttpd/lighttpd.conf -D
+CMD /usr/local/bin/startup.sh
