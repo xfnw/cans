@@ -125,7 +125,8 @@ div.recentchanges {
   color: #cdcdcd !important;
 }
 
-.recentchanges .changelog, .othersignin {
+.recentchanges .changelog, .othersignin,
+.popup:hover .balloon, .popup:focus .balloon {
   background: #141415 !important;
   color: #eee !important;
 }
@@ -164,7 +165,8 @@ div.recentchanges {
     background: #eee;
     color: black !important;
   }
-  .recentchanges .changelog, .othersignin {
+  .recentchanges .changelog, .othersignin,
+  .popup:hover .balloon, .popup:focus .balloon {
     background: white !important;
     color: black !important;
   }
