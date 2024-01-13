@@ -1,4 +1,4 @@
-# ikiwiki is only packaged in edge/testing, change to latest if it
+# tcc is only packaged in edge/testing, change to latest if it
 # makes its way to stable
 FROM alpine:edge
 
