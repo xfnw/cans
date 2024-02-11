@@ -1,2 +1,6 @@
 92d9cc3fadc12220114213070b4bdea2  distribution_files/core.gz
+2d282b2f5914c0edda42dc9bb544e319  distribution_files/modules64.gz
+a819a8d0b51250566a3ba0bc68cc1661  distribution_files/modules.gz
+17b6143cfc4fb22d47c3419507f17c49  distribution_files/rootfs.gz
 3787987c8d1dce0fe1f2f8ed32e40dfe  distribution_files/vmlinuz
+ea33716e90b71837785e860e07e8c059  distribution_files/vmlinuz64

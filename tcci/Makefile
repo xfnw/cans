@@ -9,8 +9,8 @@ run: check combi.gz ## start a QEMU virtual machine
 	qemu-system-${ARCH} -m ${MEMORY} -kernel ${KERNEL} -initrd combi.gz -append "${CMDLINE}" ${EXTRA}
 
 check: ${KERNEL} ${INITRD} distribution_files.md5.txt distribution_files.sha512.txt ## ensure file integrity
-	md5sum -c distribution_files.md5.txt
-	sha512sum -c distribution_files.sha512.txt
+	md5sum --ignore-missing -c distribution_files.md5.txt
+	sha512sum --ignore-missing -c distribution_files.sha512.txt
 
 distribution_files/%:
 	mkdir -p distribution_files
