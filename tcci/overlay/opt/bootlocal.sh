@@ -24,12 +24,17 @@ read_cmdline() {
 }
 
 wait_for_net() {
-	echo waiting for network...
+	printf 'waiting for network'
 	for try in $(seq 30); do
-		[[ "$(route -n | wc -l)" -gt 3 ]] && return 0
+		if [[ "$(route -n | wc -l)" -gt 3 ]]; then
+			echo
+			return 0
+		fi
+		printf .
 		sleep 1
 	done
 
+	echo giving up
 	return 2
 }
 
