@@ -19,6 +19,9 @@ read_cmdline() {
 			load=*)
 				load="$(printf %s "${arg#*=}")"
 				;;
+			mirror=*)
+				printf '%s\n' "${arg#*=}" > /opt/tcemirror
+				;;
 		esac
 	done
 }
@@ -64,6 +67,6 @@ run_script() {
 read_cmdline
 wait_for_net
 run_load
-run_script "$script" || echo "failed to get $script"
+run_script "$script" || echo "failed to run $script :("
 [[ -n "$script" ]] && poweroff
 
