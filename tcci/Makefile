@@ -1,11 +1,12 @@
 CMDLINE	?= loglevel=3 console=ttyS0,115200 ${APPEND}
+MEMORY	?= 1G
 EXTRA	?= -enable-kvm -nographic -nic user
 ARCH	?= ${shell uname -m}
 KERNEL	?= distribution_files/vmlinuz
 INITRD	?= distribution_files/core.gz
 
 run: check combi.gz ## start a QEMU virtual machine
-	qemu-system-${ARCH} -kernel ${KERNEL} -initrd combi.gz -append "${CMDLINE}" ${EXTRA}
+	qemu-system-${ARCH} -m ${MEMORY} -kernel ${KERNEL} -initrd combi.gz -append "${CMDLINE}" ${EXTRA}
 
 check: ${KERNEL} ${INITRD} distribution_files.md5.txt distribution_files.sha512.txt ## ensure file integrity
 	md5sum -c distribution_files.md5.txt
@@ -24,7 +25,7 @@ combi.gz: ${INITRD} overlay.gz ## build concatenated initrd
 	cat $^ > $@
 
 dist: ## create distribution tarball
-	tar czf tcci${VERSION}.tar.gz Makefile distribution_files.md5.txt distribution_files.sha512.txt overlay Makefile
+	tar czf tcci${VERSION}.tar.gz Makefile distribution_files.md5.txt distribution_files.sha512.txt overlay
 
 clean: ## clean build artifacts (keeps tc)
 	rm -f overlay.gz combi.gz tcci*.tar.gz
