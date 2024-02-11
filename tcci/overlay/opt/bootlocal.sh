@@ -29,7 +29,7 @@ run_script() {
 	script="$@"
 	[[ -z "$script" || -x script ]] && return 0
 
-	if printf %s "$script" | grep -q '^\(http\|https\|ftp\|gopher\)'; then
+	if printf %s "$script" | grep -q '^\(http\|https\|ftp\)'; then
 		rwget -O script -- "$script" || return 2
 	else
 		cp -- "$script" script || return 2
