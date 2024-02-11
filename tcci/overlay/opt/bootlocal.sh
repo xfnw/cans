@@ -1,8 +1,12 @@
 #!/bin/sh
 # put other system startup commands here
 
-# based on archlinux's releng .automated_script.sh
+# loosely based on archlinux's releng .automated_script.sh
 # but without the bashisms
+
+# default username if not specified in kernel cmdline
+user=tc
+
 read_cmdline() {
 	for arg in $(cat /proc/cmdline); do
 		case "$arg" in
@@ -31,11 +35,11 @@ wait_for_net() {
 
 run_load() {
 	[[ -n "$load" ]] && printf %s "$load" | tr , ' ' |
-		xargs sudo -u "${user:-tc}" tce-load -wil --
+		xargs sudo -u "${user}" tce-load -wil --
 }
 
 run_script() {
-	mkdir -p /tmp/wd
+	sudo -u "${user}" mkdir -p /tmp/wd
 	cd /tmp/wd
 
 	script="$@"
@@ -49,7 +53,7 @@ run_script() {
 
 	echo "starting $script..."
 	chmod +x script
-	./script
+	sudo -u "${user}" ./script
 }
 
 read_cmdline
