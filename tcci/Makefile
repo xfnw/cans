@@ -2,11 +2,15 @@ CMDLINE	?= loglevel=3 console=ttyS0,115200 ${APPEND}
 MEMORY	?= 1G
 EXTRA	?= -enable-kvm -nographic -nic user
 ARCH	?= ${shell uname -m}
+PFLAGS	?= boot --dhcp-no-bind -p 8926
 KERNEL	?= distribution_files/vmlinuz
 INITRD	?= distribution_files/core.gz
 
 run: check combi.gz ## start a QEMU virtual machine
 	qemu-system-${ARCH} -m ${MEMORY} -kernel ${KERNEL} -initrd combi.gz -append "${CMDLINE}" ${EXTRA}
+
+pxe: check combi.gz ## boot a machine with pxe
+	pixiecore ${PFLAGS} --cmdline "${CMDLINE}" ${KERNEL} combi.gz
 
 check: ${KERNEL} ${INITRD} distribution_files.md5.txt distribution_files.sha512.txt ## ensure file integrity
 	md5sum --ignore-missing -c distribution_files.md5.txt
