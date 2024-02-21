@@ -23,7 +23,7 @@ distribution_files/%:
 core64.gz: distribution_files/modules64.gz distribution_files/rootfs.gz ## build 64 bit initrd
 
 overlay.gz: overlay/etc/inittab overlay/opt/bootlocal.sh ## build overlay initrd
-	find overlay -printf "%P\0" | cpio --create --null --format newc -D overlay | gzip > $@
+	find overlay -printf "%P\0" | cpio --create --null --format newc -D overlay | gzip -9 > $@
 
 combi.gz: ${INITRD} overlay.gz ## build concatenated initrd
 

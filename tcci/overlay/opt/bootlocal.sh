@@ -5,21 +5,21 @@
 # but without the bashisms
 
 # default username if not specified in kernel cmdline
-user=tc
+: ${USER:=tc}
 
 read_cmdline() {
 	for arg in $(cat /proc/cmdline); do
 		case "$arg" in
 			script=*)
-				script="$(printf %s "${arg#*=}")"
+				SCRIPT="$(printf %s "${arg#*=}")"
 				;;
 			user=*)
-				user="$(printf %s "${arg#*=}")"
+				USER="$(printf %s "${arg#*=}")"
 				;;
 			load=*)
-				load="$(printf %s "${arg#*=}")"
+				LOAD="$(printf %s "${arg#*=}")"
 				;;
-			mirror=*)
+			mirror=*|MIRROR=*)
 				printf '%s\n' "${arg#*=}" > /opt/tcemirror
 				;;
 		esac
@@ -42,31 +42,30 @@ wait_for_net() {
 }
 
 run_load() {
-	[[ -n "$load" ]] && printf %s "$load" | tr , ' ' |
-		xargs sudo -u "${user}" tce-load -wil --
+	[[ -n "$LOAD" ]] && printf %s "$LOAD" | tr , ' ' |
+		xargs sudo -u "$USER" tce-load -wil --
 }
 
 run_script() {
-	sudo -u "${user}" mkdir -p /tmp/wd
+	sudo -u "$USER" mkdir -p /tmp/wd
 	cd /tmp/wd
 
-	script="$@"
-	[[ -z "$script" || -x script ]] && return 0
+	[[ -z "$SCRIPT" || -x script ]] && return 0
 
-	if printf %s "$script" | grep -q '^\(http\|https\|ftp\)'; then
-		wget -O script -- "$script" || return 2
+	if printf %s "$SCRIPT" | grep -q '^\(http\|https\|ftp\)'; then
+		wget -O script -- "$SCRIPT" || return 2
 	else
-		cp -- "$script" script || return 2
+		cp -- "$SCRIPT" script || return 2
 	fi
 
-	echo "starting $script..."
+	echo "starting $SCRIPT..."
 	chmod +x script
-	sudo -u "${user}" ./script
+	sudo -u "$USER" ./script
 }
 
 read_cmdline
 wait_for_net
 run_load
-run_script "$script" || echo "failed to run $script :("
-[[ -n "$script" ]] && poweroff
+run_script || echo "failed to run $SCRIPT :("
+[[ -n "$SCRIPT" ]] && poweroff
 
