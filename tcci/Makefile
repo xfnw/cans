@@ -8,10 +8,10 @@ KERNEL	?= ${TCVER}/distribution_files/vmlinuz
 INITRD	?= ${TCVER}/distribution_files/core.gz
 
 run: check ${TCVER}/combi.gz ## start a QEMU virtual machine
-	qemu-system-${ARCH} -m ${MEMORY} -kernel ${KERNEL} -initrd ${TCVER}/combi.gz -append "${CMDLINE}" ${EXTRA}
+	qemu-system-${ARCH} -m ${MEMORY} -kernel ${KERNEL} -initrd ${TCVER}/combi.gz -append '${CMDLINE}' ${EXTRA}
 
 pxe: check ${TCVER}/combi.gz ## boot a machine with pxe
-	pixiecore ${PFLAGS} --cmdline "${CMDLINE}" ${KERNEL} ${TCVER}/combi.gz
+	pixiecore ${PFLAGS} --cmdline '${CMDLINE}' ${KERNEL} ${TCVER}/combi.gz
 
 check: ${KERNEL} ${INITRD} distribution_files.md5.txt distribution_files.sha512.txt ## ensure file integrity
 	md5sum --quiet --ignore-missing -c distribution_files.md5.txt
