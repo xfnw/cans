@@ -35,11 +35,12 @@ a:hover {
   background: #443;
 }
 
-code, kbd, pre {
+code, kbd, pre, textarea {
+  border: none;
   color: #eee;
 }
 
-code, kbd, pre, .flex div, .box {
+code, kbd, pre, .flex div, .box, textarea {
   background: #222;
 }
 
@@ -149,10 +150,10 @@ div.recentchanges {
   th, td, details, input {
     border: 1px solid #ccc;
   }
-  code, kbd, pre {
+  code, kbd, pre, textarea {
     color: #111;
   }
-  code, kbd, pre, .flex div, .box {
+  code, kbd, pre, .flex div, .box, textarea {
     background: #ddd;
   }
   blockquote {
