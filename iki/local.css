@@ -143,6 +143,9 @@ div.recentchanges {
   a:visited {
     color: #551A8B;
   }
+  :target {
+    background-color: #ee8;
+  }
   th, summary, input {
     background: #ccc;
     color: #141415;
