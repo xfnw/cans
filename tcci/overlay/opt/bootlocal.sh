@@ -19,6 +19,9 @@ read_cmdline() {
 			load=*)
 				LOAD="$(printf %s "${arg#*=}")"
 				;;
+			console=*)
+				CONSOLE="$(printf %s "${arg#*=}")"
+				;;
 			mirror=*|MIRROR=*)
 				printf '%s\n' "${arg#*=}" > /opt/tcemirror
 				;;
@@ -29,7 +32,7 @@ read_cmdline() {
 wait_for_net() {
 	printf 'waiting for network'
 	for try in $(seq 30); do
-		if [[ "$(route -n | wc -l)" -gt 3 ]]; then
+		if [ "$(route -n | wc -l)" -gt 3 ]; then
 			echo
 			return 0
 		fi
@@ -42,7 +45,7 @@ wait_for_net() {
 }
 
 run_load() {
-	[[ -n "$LOAD" ]] && printf %s "$LOAD" | tr , ' ' |
+	[ -n "$LOAD" ] && printf %s "$LOAD" | tr , ' ' |
 		xargs sudo -u "$USER" tce-load -wil --
 }
 
@@ -50,7 +53,7 @@ run_script() {
 	sudo -u "$USER" mkdir -p /tmp/wd
 	cd /tmp/wd
 
-	[[ -z "$SCRIPT" || -x script ]] && return 0
+	[ -x script ] && return 0
 
 	if printf %s "$SCRIPT" | grep -q '^\(http\|https\|ftp\)'; then
 		wget -O script -- "$SCRIPT" || return 2
@@ -66,6 +69,11 @@ run_script() {
 read_cmdline
 wait_for_net
 run_load
-run_script || echo "failed to run $SCRIPT :("
-[[ -n "$SCRIPT" ]] && poweroff
+if [ -n "$SCRIPT" ]; then
+	run_script || echo "failed to run $SCRIPT :("
+else
+	echo no script specified, starting getty instead
+	/sbin/getty 38400 "${CONSOLE%,*}"
+fi
+poweroff -f
 
