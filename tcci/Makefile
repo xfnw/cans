@@ -3,7 +3,7 @@ MEMORY	?= 1G
 EXTRA	?= -enable-kvm -nographic -nic user
 ARCH	?= ${shell uname -m}
 PFLAGS	?= boot --dhcp-no-bind -p 8926
-TCVER	?= 10.1
+TCVER	?= 15.0
 KERNEL	?= ${TCVER}/distribution_files/vmlinuz
 INITRD	?= ${TCVER}/distribution_files/core.gz
 
