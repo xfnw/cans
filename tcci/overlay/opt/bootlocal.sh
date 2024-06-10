@@ -4,8 +4,8 @@
 # loosely based on archlinux's releng .automated_script.sh
 # but without the bashisms
 
-# default username if not specified in kernel cmdline
-: ${USER:=tc}
+# defaults if not specified in kernel cmdline
+: ${USER:=tc} ${FINISH:=poweroff}
 
 read_cmdline() {
 	for arg in $(cat /proc/cmdline); do
@@ -21,6 +21,9 @@ read_cmdline() {
 				;;
 			console=*)
 				CONSOLE="$(printf %s "${arg#*=}")"
+				;;
+			finish=*)
+				FINISH="$(printf %s "${arg#*=}")"
 				;;
 			mirror=*|MIRROR=*)
 				printf '%s\n' "${arg#*=}" > /opt/tcemirror
@@ -75,5 +78,5 @@ else
 	echo no script specified, starting getty instead
 	/sbin/getty 38400 "${CONSOLE%,*}"
 fi
-poweroff -f
+"$FINISH" -f
 
