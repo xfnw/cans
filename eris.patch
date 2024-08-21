@@ -1,0 +1,58 @@
+diff --git a/src/ngircd/irc-server.c b/src/ngircd/irc-server.c
+index 6aa37574..58daa082 100644
+--- a/src/ngircd/irc-server.c
++++ b/src/ngircd/irc-server.c
+@@ -73,53 +73,10 @@ IRC_SERVER( CLIENT *Client, REQUEST *Req )
+ 						  Client_ID(Client),
+ 						  Req->command);
+ 
+-		/* Get configuration index of new remote server ... */
+-		for (i = 0; i < MAX_SERVERS; i++)
+-			if (strcasecmp(Req->argv[0], Conf_Server[i].name) == 0)
+-				break;
+-
+-		/* Make sure the remote server is configured here */
+-		if (i >= MAX_SERVERS) {
+-			Log(LOG_ERR,
+-			    "Connection %d: Server \"%s\" not configured here!",
+-			    Client_Conn(Client), Req->argv[0]);
+-			Conn_Close(Client_Conn(Client), NULL,
+-				   "Server not configured here", true);
+-			return DISCONNECTED;
+-		}
+-
+-#ifdef SSL_SUPPORT
+-		/* Does this server require an SSL connection? */
+-		if (Conf_Server[i].SSLConnect &&
+-		    !(Conn_Options(Client_Conn(Client)) & CONN_SSL)) {
+-			Log(LOG_ERR,
+-			    "Connection %d: Server \"%s\" requires a secure connection!",
+-			    Client_Conn(Client), Req->argv[0]);
+-			Conn_Close(Client_Conn(Client), NULL,
+-				   "Secure connection required", true);
+-			return DISCONNECTED;
+-		}
+-#endif
+-
+-		/* Check server password */
+-		if (strcmp(Conn_Password(Client_Conn(Client)),
+-		    Conf_Server[i].pwd_in) != 0) {
+-			Log(LOG_ERR,
+-			    "Connection %d: Got bad password from server \"%s\"!",
+-			    Client_Conn(Client), Req->argv[0]);
+-			Conn_Close(Client_Conn(Client), NULL,
+-				   "Bad password", true);
+-			return DISCONNECTED;
+-		}
+-
+ 		/* Is there a registered server with this ID? */
+ 		if (!Client_CheckID(Client, Req->argv[0]))
+ 			return DISCONNECTED;
+ 
+-		/* Mark this connection as belonging to an configured server */
+-		if (!Conf_SetServer(i, Client_Conn(Client)))
+-			return DISCONNECTED;
+-
+ 		Client_SetID( Client, Req->argv[0] );
+ 		Client_SetHops( Client, 1 );
+ 		Client_SetInfo( Client, Req->argv[Req->argc - 1] );
