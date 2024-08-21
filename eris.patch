@@ -1,8 +1,16 @@
 diff --git a/src/ngircd/irc-server.c b/src/ngircd/irc-server.c
-index 6aa37574..58daa082 100644
+index 6aa37574..6dd5437f 100644
 --- a/src/ngircd/irc-server.c
 +++ b/src/ngircd/irc-server.c
-@@ -73,53 +73,10 @@ IRC_SERVER( CLIENT *Client, REQUEST *Req )
+@@ -51,7 +51,6 @@ IRC_SERVER( CLIENT *Client, REQUEST *Req )
+ {
+ 	char str[100];
+ 	CLIENT *from, *c;
+-	int i;
+ 
+ 	assert( Client != NULL );
+ 	assert( Req != NULL );
+@@ -73,53 +72,10 @@ IRC_SERVER( CLIENT *Client, REQUEST *Req )
  						  Client_ID(Client),
  						  Req->command);
  
@@ -56,3 +64,12 @@ index 6aa37574..58daa082 100644
  		Client_SetID( Client, Req->argv[0] );
  		Client_SetHops( Client, 1 );
  		Client_SetInfo( Client, Req->argv[Req->argc - 1] );
+@@ -129,7 +85,7 @@ IRC_SERVER( CLIENT *Client, REQUEST *Req )
+ 		if (Client_Token(Client) != TOKEN_OUTBOUND) {
+ 			/* Incoming connection, send user/pass */
+ 			if (!IRC_WriteStrClient(Client, "PASS %s %s",
+-						Conf_Server[i].pwd_out,
++						"hunter2",
+ 						NGIRCd_ProtoID)
+ 			    || !IRC_WriteStrClient(Client, "SERVER %s 1 :%s",
+ 						   Conf_ServerName,
