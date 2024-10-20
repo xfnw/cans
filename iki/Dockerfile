@@ -3,7 +3,7 @@
 FROM alpine:edge
 
 RUN sed -i '/community$/{p;s/community$/testing/;}' /etc/apk/repositories && \
-	apk add --no-cache git ikiwiki lighttpd python3 tcc musl-dev perl-db_file
+	apk add --no-cache git ikiwiki lighttpd python3 tcc tcc-libs-static musl-dev perl-db_file
 
 # ikiwiki does not allow deviating from the "master" branch name
 RUN adduser -D -h /wiki wiki &&\
