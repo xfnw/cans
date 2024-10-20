@@ -13,5 +13,6 @@ FROM alpine:latest
 COPY --from=build /usr/local/sbin/ngircd /usr/local/bin
 COPY --from=build /usr/local/share/doc/ngircd/Commands.txt /usr/local/share/doc/ngircd/
 ADD minimal.conf /usr/local/etc/ngircd.conf
+ADD README /usr/local/etc/ngircd.motd
 EXPOSE 6667/tcp
 CMD ["ngircd", "-n"]
