@@ -1,0 +1,3 @@
+[submodule "ngircd"]
+	path = ngircd
+	url = https://github.com/ngircd/ngircd
