@@ -2,8 +2,8 @@ FROM debian:latest as build
 RUN apt update && apt install -y build-essential pkgconf automake autotools-dev libident-dev
 WORKDIR /build
 ADD ngircd /build
-ADD eris.patch /build
-RUN patch -p1 <eris.patch
+ADD *.patch /build/
+RUN cat *.patch | patch -p1
 RUN ./autogen.sh
 RUN ./configure --enable-ipv6 --with-ident --with-iconv --with-syslog
 RUN make
