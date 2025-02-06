@@ -19,3 +19,15 @@ beb86ff0f3c43a2bbfe58ef887eb2bbb  14.0/x86/distribution_files/core.gz
 0bfdb90c1a701138eda18f1d6fae97d7  15.0/x86/distribution_files/rootfs.gz
 f0d61c702d0419f7e17d12133c5d7136  15.0/x86/distribution_files/vmlinuz
 872001fdd5d80dee905654241cc6b4e7  15.0/x86/distribution_files/vmlinuz64
+0bfdb90c1a701138eda18f1d6fae97d7  15.0/x86/distribution_files/rootfs.gz
+5343be85f0547e4980e2c494d752c095  15.0/x86/distribution_files/modules.gz
+d8016a5c082c262b11bc34f4297dc86f  14.0/x86/distribution_files/modules.gz
+90148b6c99683af5624aa5b9a6c3f196  14.0/x86/distribution_files/rootfs.gz
+a819a8d0b51250566a3ba0bc68cc1661  10.1/x86/distribution_files/modules.gz
+17b6143cfc4fb22d47c3419507f17c49  10.1/x86/distribution_files/rootfs.gz
+2d282b2f5914c0edda42dc9bb544e319  10.1/x86_64/distribution_files/modules64.gz
+ec65d3b2bbb64f62a171f60439c84127  10.1/x86_64/distribution_files/rootfs64.gz
+50914c2c8afd682f241a59b700d6bce3  14.0/x86_64/distribution_files/modules64.gz
+9b83cc61e606c631fa58dd401ee3f631  14.0/x86_64/distribution_files/rootfs64.gz
+39839e2c45af4a44328e64d03d0a2078  15.0/x86_64/distribution_files/modules64.gz
+2f537d9b34a36b87a3488ab16b0e242a  15.0/x86_64/distribution_files/rootfs64.gz

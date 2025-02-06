@@ -6,7 +6,7 @@ PFLAGS	?= boot --dhcp-no-bind -p 8926
 TCVER	?= 15.0
 TCARCH	?= x86
 KERNEL	?= ${TCARCH}/distribution_files/vmlinuz
-INITRD	?= ${TCARCH}/distribution_files/core.gz
+INITRD	?= ${TCARCH}/core.gz
 
 run: check ${TCVER}/${TCARCH}/combi.gz ## start a QEMU virtual machine
 	qemu-system-${ARCH} -m ${MEMORY} -kernel ${TCVER}/${KERNEL} -initrd ${TCVER}/${TCARCH}/combi.gz -append '${CMDLINE}' ${EXTRA}
