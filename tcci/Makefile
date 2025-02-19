@@ -38,7 +38,7 @@ check: ${TCVER}/${KERNEL} ${TCVER}/${INITRD} distribution_files.md5.txt distribu
 
 ${TCVER}/${TCARCH}/core.gz: ${TCVER}/${TCARCH}/distribution_files/modules.gz ${TCVER}/${TCARCH}/distribution_files/rootfs.gz ## build 32 bit initrd
 
-${TCVER}/${TCARCH}/core64.gz: ${TCVER}/${TCARCH}/distribution_files/modules64.gz ${TCVER}/${TCARCH}/distribution_files/rootfs64.gz ## build 64 bit initrd
+${TCVER}/${TCARCH}/corepure64.gz: ${TCVER}/${TCARCH}/distribution_files/modules64.gz ${TCVER}/${TCARCH}/distribution_files/rootfs64.gz ## build 64 bit initrd
 
 overlay.gz: overlay/etc/inittab overlay/opt/bootlocal.sh ## build overlay initrd
 	find overlay -printf "%P\0" | cpio --create --null --format newc -D overlay | gzip -9 > $@
