@@ -27,14 +27,14 @@ check: ${TCVER}/${KERNEL} ${TCVER}/${INITRD} distribution_files.md5.txt distribu
 	wget http://tinycorelinux.net/14.x/${TCARCH}/archive/14.0/distribution_files/${notdir $@} -O $@
 
 15.0/${TCARCH}/distribution_files/%:
-	# warning: tc has yet to create the archive path for 15.0
-	# this will fail verification if 15.1 is released
 	mkdir -p ${dir $@}
-	wget http://tinycorelinux.net/15.x/${TCARCH}/release/distribution_files/${notdir $@} -O $@
+	wget http://tinycorelinux.net/15.x/${TCARCH}/archive/15.0/distribution_files/${notdir $@} -O $@
 
 16.0/${TCARCH}/distribution_files/%:
+	# warning: tc has yet to create the archive path for 16.0
+	# this will fail verification if 16.1 is released
 	mkdir -p ${dir $@}
-	wget http://tinycorelinux.net/16.x/${TCARCH}/release_candidates/distribution_files/${notdir $@} -O $@
+	wget http://tinycorelinux.net/16.x/${TCARCH}/release/distribution_files/${notdir $@} -O $@
 
 ${TCVER}/${TCARCH}/core.gz: ${TCVER}/${TCARCH}/distribution_files/modules.gz ${TCVER}/${TCARCH}/distribution_files/rootfs.gz ## build 32 bit initrd
 
