@@ -5,7 +5,7 @@ ADD ngircd /build
 ADD *.patch /build/
 RUN cat *.patch | patch -p1
 RUN ./autogen.sh
-RUN ./configure --enable-ipv6 --with-ident --with-iconv --with-syslog
+RUN ./configure --enable-ipv6 --with-ident --with-iconv --with-syslog PACKAGE_VERSION=27-eris
 RUN make
 RUN make install
 
