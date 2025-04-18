@@ -32,8 +32,8 @@ ec65d3b2bbb64f62a171f60439c84127  10.1/x86_64/distribution_files/rootfs64.gz
 39839e2c45af4a44328e64d03d0a2078  15.0/x86_64/distribution_files/modules64.gz
 2f537d9b34a36b87a3488ab16b0e242a  15.0/x86_64/distribution_files/rootfs64.gz
 343fe1aaf438cc8493bd5b1a5b40227d  16.0/x86_64/distribution_files/modules64.gz
-bbf34616ef352388f5c9f3846f77c352  16.0/x86_64/distribution_files/rootfs64.gz
+53986316156921cefc23c8e1cca754a4  16.0/x86_64/distribution_files/rootfs64.gz
 cfbdc3d16276a0baaf01d2a73a739b44  16.0/x86_64/distribution_files/vmlinuz64
 ae8265191e746355427341547f759d91  16.0/x86/distribution_files/modules.gz
-493960657e9c4c0cdf6bcb68cb0da8f9  16.0/x86/distribution_files/rootfs.gz
+3832f5e460803b0f8abe5e374798ead1  16.0/x86/distribution_files/rootfs.gz
 4cd982623c0ebae8dbb4145c1ad0d2a8  16.0/x86/distribution_files/vmlinuz
