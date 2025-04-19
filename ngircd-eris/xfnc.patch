@@ -1,16 +1,16 @@
-From 0ea61cb45bc1f36245d31360d360307b7bbeedc6 Mon Sep 17 00:00:00 2001
+From 94a70e73f429e23e9de7300987ddafb02846bd17 Mon Sep 17 00:00:00 2001
 From: xfnw <xfnw@riseup.net>
 Date: Fri, 20 Dec 2024 12:22:05 -0500
 Subject: [PATCH] add custom XFNC command to force nickchanges
 
 ---
- src/ngircd/irc-login.c | 52 ++++++++++++++++++++++++++++++++++++++++++
+ src/ngircd/irc-login.c | 47 ++++++++++++++++++++++++++++++++++++++++++
  src/ngircd/irc-login.h |  1 +
  src/ngircd/parse.c     |  1 +
- 3 files changed, 54 insertions(+)
+ 3 files changed, 49 insertions(+)
 
 diff --git a/src/ngircd/irc-login.c b/src/ngircd/irc-login.c
-index fb221922..e35519d6 100644
+index fb221922..b08190e4 100644
 --- a/src/ngircd/irc-login.c
 +++ b/src/ngircd/irc-login.c
 @@ -33,6 +33,7 @@
@@ -21,7 +21,7 @@ index fb221922..e35519d6 100644
  
  #include "irc-login.h"
  
-@@ -410,6 +411,57 @@ IRC_SVSNICK(CLIENT *Client, REQUEST *Req)
+@@ -410,6 +411,52 @@ IRC_SVSNICK(CLIENT *Client, REQUEST *Req)
  	return CONNECTED;
  }
  
@@ -56,14 +56,9 @@ index fb221922..e35519d6 100644
 +		return IRC_WriteErrClient(Client, ERR_NOSUCHNICK_MSG,
 +					  Client_ID(Client), Req->argv[0]);
 +
-+	if (Client_Conn(target) <= NONE) {
-+		/* We have to forward the message to the server handling
-+		 * this user; this is required to make sure all servers
-+		 * in the network do follow the nick name change! */
-+		return IRC_WriteStrClientPrefix(Client_NextHop(target), from,
-+						"XFNC %s %s",
-+						Req->argv[0], Req->argv[1]);
-+	}
++	/* We have to forward the message to other servers */
++	IRC_WriteStrServersPrefix(from, target, "XFNC %s :%s",
++				  Req->argv[0], Req->argv[1]);
 +
 +	/* Nickname already in use? */
 +	if (Client_Search(Req->argv[1])) {
@@ -104,5 +99,5 @@ index 7b5d28c2..385fcd5f 100644
  	_CMD("TIME", IRC_TIME, CLIENT_USER|CLIENT_SERVER, 0, 1, 1),
  	_CMD("TOPIC", IRC_TOPIC, CLIENT_USER|CLIENT_SERVER, 1, 2, 1),
 -- 
-2.47.1
+2.49.0
 
