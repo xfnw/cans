@@ -18,6 +18,10 @@ check: ${TCVER}/${KERNEL} ${TCVER}/${INITRD} distribution_files.md5.txt distribu
 	md5sum --quiet --ignore-missing -c distribution_files.md5.txt
 	sha512sum --quiet --ignore-missing -c distribution_files.sha512.txt
 
+distsort: ## sort distribution files checksums
+	sort -uk2 distribution_files.md5.txt | sponge distribution_files.md5.txt
+	sort -uk2 distribution_files.sha512.txt | sponge distribution_files.sha512.txt
+
 10.1/${TCARCH}/distribution_files/%:
 	mkdir -p ${dir $@}
 	wget http://tinycorelinux.net/10.x/${TCARCH}/archive/10.1/distribution_files/${notdir $@} -O $@
