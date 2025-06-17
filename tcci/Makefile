@@ -3,7 +3,7 @@ MEMORY	?= 1G
 EXTRA	?= -enable-kvm -nographic -nic user
 ARCH	?= ${shell uname -m}
 PFLAGS	?= boot --dhcp-no-bind -p 8926
-TCVER	?= 16.0
+TCVER	?= 16.1
 TCARCH	?= x86
 KERNEL	?= ${TCARCH}/distribution_files/vmlinuz
 INITRD	?= ${TCARCH}/core.gz
@@ -31,8 +31,12 @@ check: ${TCVER}/${KERNEL} ${TCVER}/${INITRD} distribution_files.md5.txt distribu
 	wget http://tinycorelinux.net/15.x/${TCARCH}/archive/15.0/distribution_files/${notdir $@} -O $@
 
 16.0/${TCARCH}/distribution_files/%:
-	# warning: tc has yet to create the archive path for 16.0
-	# this will fail verification if 16.1 is released
+	mkdir -p ${dir $@}
+	wget http://tinycorelinux.net/16.x/${TCARCH}/archive/16.0/distribution_files/${notdir $@} -O $@
+
+16.1/${TCARCH}/distribution_files/%:
+	# warning: tc has yet to create the archive path for 16.1
+	# this will fail verification if 16.2 is released
 	mkdir -p ${dir $@}
 	wget http://tinycorelinux.net/16.x/${TCARCH}/release/distribution_files/${notdir $@} -O $@
 
