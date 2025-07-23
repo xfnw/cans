@@ -1,9 +1,6 @@
-# tcc is only packaged in edge/testing, change to latest if it
-# makes its way to stable
-FROM alpine:edge
+FROM alpine:latest
 
-RUN sed -i '/community$/{p;s/community$/testing/;}' /etc/apk/repositories && \
-	apk add --no-cache git ikiwiki lighttpd python3 tcc tcc-libs-static musl-dev perl-db_file
+RUN apk add --no-cache git ikiwiki lighttpd python3 tcc tcc-libs-static musl-dev perl-db_file
 
 # ikiwiki does not allow deviating from the "master" branch name
 RUN adduser -D -h /wiki wiki &&\
@@ -16,4 +13,4 @@ COPY auto.setup /etc/ikiwiki/
 COPY 404.cgi /etc/ikiwiki/
 
 EXPOSE 80
-CMD /usr/local/bin/startup.sh
+CMD ["/usr/local/bin/startup.sh"]
