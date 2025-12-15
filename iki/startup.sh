@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-if [ ! -d /wiki/.ikiwiki ]; then
+if [ ! -e /wiki/wiki.setup ]; then
 	su wiki -c 'ikiwiki --setup /etc/ikiwiki/auto.setup'
 	cp /etc/ikiwiki/404.cgi /wiki/www/
 fi
