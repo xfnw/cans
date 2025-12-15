@@ -3,4 +3,4 @@
 
 export REDIRECT_URL="$REQUEST_URI"
 
-exec /wiki/www/ikiwiki.cgi "$@"
+exec /work/www/ikiwiki.cgi "$@"
