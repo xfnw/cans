@@ -14,9 +14,6 @@ require IkiWiki::Setup::Automator;
 
 our $wikiname=IkiWiki::Setup::Automator::ask(
 	gettext("What will the wiki be named?"), gettext("wiki"));
-our $wikiname_short=IkiWiki::Setup::Automator::sanitize_wikiname($wikiname);
-our $rcs=IkiWiki::Setup::Automator::ask(
-	gettext("What revision control system to use?"), "git");
 our $admin=IkiWiki::Setup::Automator::ask(
 	gettext("Which user (wiki account, openid, or email) will be admin?"), $ENV{USER});
 use Net::Domain q{hostfqdn};
@@ -26,11 +23,11 @@ our $domain=hostfqdn() || IkiWiki::Setup::Automator::ask(
 IkiWiki::Setup::Automator->import(
 	wikiname => $wikiname,
 	adminuser => [$admin],
-	rcs => $rcs,
-	srcdir => "$ENV{HOME}/$wikiname_short",
+	rcs => "git",
+	srcdir => "$ENV{HOME}/wiki",
 	destdir => "$ENV{HOME}/www",
-	repository => "$ENV{HOME}/$wikiname_short.".($rcs eq "monotone" ? "mtn" : $rcs),
-	dumpsetup => "$ENV{HOME}/$wikiname_short.setup",
+	repository => "$ENV{HOME}/wiki.git",
+	dumpsetup => "$ENV{HOME}/wiki.setup",
 	url => "http://$domain",
 	cgiurl => "http://$domain/ikiwiki.cgi",
 	cgi_wrapper => "$ENV{HOME}/www/ikiwiki.cgi",
