@@ -6,5 +6,7 @@ if [ ! -d /wiki/.ikiwiki ]; then
 	cp /etc/ikiwiki/404.cgi /wiki/www/
 fi
 
+su wiki -c 'ikiwiki --setup /wiki/wiki.setup'
+
 echo starting lighttpd...
 /usr/sbin/lighttpd -f /etc/lighttpd/lighttpd.conf -D
