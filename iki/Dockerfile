@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk add --no-cache git ikiwiki lighttpd python3 tcc tcc-libs-static musl-dev perl-db_file
+RUN apk add --no-cache git git-daemon ikiwiki lighttpd python3 tcc tcc-libs-static musl-dev perl-db_file
 
 RUN <<EOF
 adduser -D -h /home/wiki wiki
